@@ -2,7 +2,7 @@
 read -r -p "File path to upload: " FILE_PATH;
 
 if [ "$FILE_PATH" == "" ]; then
-  FILE_PATH="./uploads/test.txt";
+  FILE_PATH="./test/test.txt";
 fi
 
 read -r -p "ENV (int (default) / stg / prd ): " SELECTED_ENV;

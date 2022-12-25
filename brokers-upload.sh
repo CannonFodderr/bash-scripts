@@ -1,19 +1,38 @@
 #!/bin/bash
-read -r -p "File path to upload: " FILE_PATH
-read -r -p "ENV (int (default) / stg / prd ): " SELECTED_ENV;
+# RED="\e[31m"
+# GREEN="\e[32m"
+# ENDCOLOR="\e[0m"
 
-HOSTS_FOLDER="./hosts/brokers"
-# Select hosts file to upload
-HOSTS_FILE="$HOSTS_FOLDER/integration";
-if [ "$SELECTED_ENV" == 'stg' ];then
-    HOSTS_FILE="$HOSTS_FOLDER/staging";
-elif [ "$SELECTED_ENV" == 'prd' ]; then
-    HOSTS_FILE="$HOSTS_FOLDER/production";
+# SELECT HOSTS FOLDER
+FOLDERS=$(ls -d ./hosts/*)
+echo "$FOLDERS"
+COLUMNS=0
+echo "SELECT HOSTS FOLDER"
+select folder in $FOLDERS; do test -n "$folder" && break; echo ">>> Invalid Selection"; done
+echo "Selected folder: $folder"
+
+#SELECT A FILE PATH IN HOSTS FOLDER
+FILES=$(ls -p "$folder"/*)
+echo "SELECT HOSTS FILE:"
+COLUMNS=0
+select hostsfile in $FILES; do test -n "$folder" && break; echo ">>> Invalid Selection"; done
+echo "Selected file:  $hostsfile"
+
+# UPLOAD FILE PATH
+read -r -p "File path to upload: " FILE_PATH;
+
+if [ "$FILE_PATH" == "" ]; then
+  FILE_PATH="./test/test.txt";
 fi
 
-echo "SELECTED HOST FILE: $HOSTS_FILE"
+# SET DEFAULT HOST PATH
+read -r -p "Set HOSTS path to upload to (default: ~): " DEFAULT_HOST_PATH
+if [ "$DEFAULT_HOST_PATH" == "" ];then
+    DEFAULT_HOST_PATH="~"
+fi
 
+# UPLOAD TO EACH HOST
 while IFS= read -r host; do
-  echo "UPLOADING: $FILE_PATH TO: $host:~"
-  scp "$FILE_PATH" "$host:~"
-done <$HOSTS_FILE
+  echo "UPLOADING: $FILE_PATH TO: $host:$DEFAULT_HOST_PATH"
+  scp "$FILE_PATH" "$host:$DEFAULT_HOST_PATH"
+done <"$hostsfile"
