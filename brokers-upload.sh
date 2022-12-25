@@ -19,14 +19,14 @@ select hostsfile in $FILES; do test -n "$folder" && break; echo ">>> Invalid Sel
 echo "Selected file:  $hostsfile"
 
 # UPLOAD FILE PATH
-read -r -p "File path to upload: " FILE_PATH;
+read -r -p "FILE PATH TO UPLOAD: " FILE_PATH;
 
 if [ "$FILE_PATH" == "" ]; then
   FILE_PATH="./test/test.txt";
 fi
 
 # SET DEFAULT HOST PATH
-read -r -p "Set HOSTS path to upload to (default: ~): " DEFAULT_HOST_PATH
+read -r -p "SET HOSTS PATH TO UPLOAD TO (default: ~): " DEFAULT_HOST_PATH
 if [ "$DEFAULT_HOST_PATH" == "" ];then
     DEFAULT_HOST_PATH="~"
 fi
