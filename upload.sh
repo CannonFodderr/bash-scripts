@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # SELECT HOSTS FOLDER
 FOLDERS=$(ls -d ./hosts/*)
 echo "$FOLDERS"
